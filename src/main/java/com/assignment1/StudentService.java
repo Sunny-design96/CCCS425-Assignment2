@@ -60,7 +60,7 @@ public class StudentService {
             return Response.ok(map, MediaType.APPLICATION_JSON).build();
     	}catch(Exception e) {
     		 return Response.status(Response.Status.BAD_REQUEST)
-    	                .entity("Missing name or email.").build();
+    	                .entity("Missing required data, please try again.").build();
     	}
      
         
