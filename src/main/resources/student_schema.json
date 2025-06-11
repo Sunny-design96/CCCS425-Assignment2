@@ -1,0 +1,18 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "type" : "object",
+   "title" : "Student",
+  "properties" : {
+    "email" : {
+      "type" : "string",
+      "format" : "email"
+    },
+    "id" : {
+      "type" : "integer"
+    },
+    "name" : {
+      "type" : "string"
+    }
+   },
+   "required": ["id", "name", "email"]  
+}

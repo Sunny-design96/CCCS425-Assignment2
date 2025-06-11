@@ -59,9 +59,65 @@
       <artifactId>jakarta.xml.bind-api</artifactId>
       <version>3.0.1</version>
     </dependency>
-  </dependencies>
+    
+    <!-- Json Schema Validation-->
+    <dependency>
+    <groupId>com.github.victools</groupId>
+    <artifactId>jsonschema-generator</artifactId>
+    <version>4.30.0</version>
+	</dependency>
+	<dependency>
+    <groupId>com.github.victools</groupId>
+    <artifactId>jsonschema-module-jakarta-validation</artifactId>
+    <version>4.30.0</version>
+</dependency>
+<dependency>
+        <groupId>jakarta.validation</groupId>
+        <artifactId>jakarta.validation-api</artifactId>
+        <version>3.0.2</version>
+    </dependency>
+	<dependency>
+  <groupId>com.fasterxml.jackson.core</groupId>
+  <artifactId>jackson-core</artifactId>
+  <version>2.15.0</version>
+</dependency>
 
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.15.0</version>
+</dependency>
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-annotations</artifactId>
+    <version>2.15.0</version>
+</dependency>
+<dependency>
+    <groupId>org.json</groupId>
+    <artifactId>json</artifactId>
+    <version>20230227</version> <!-- latest stable version as of 2025 -->
+</dependency>
+<dependency>
+	<groupId>com.github.erosb</groupId>
+	<artifactId>everit-json-schema</artifactId>
+	<version>1.14.6</version>
+</dependency>
+  </dependencies>
   <build>
-    <finalName>jersey-assignment</finalName>
+  	<plugins>
+  	<plugin>
+	   <groupId>com.github.victools</groupId>
+	   <artifactId>jsonschema-maven-plugin</artifactId>
+	   <version>4.31.1</version>
+		   <executions>
+		      <execution>
+		       <goals>
+		         <goal>generate</goal>
+		       </goals>
+		     </execution>
+		  </executions>
+		</plugin>
+  	</plugins>
+  	<finalName>jersey-assignment</finalName>
   </build>
 </project>

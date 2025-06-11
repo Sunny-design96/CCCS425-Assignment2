@@ -10,5 +10,6 @@ public class AppConfig extends ResourceConfig {
     public AppConfig() {
         packages("com.assignment1");
         register(JsonBindingFeature.class);
+        register(StudentService.class);
     }
 }
