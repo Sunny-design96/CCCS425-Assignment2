@@ -4,8 +4,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.validation.Schema;
-
 import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
 import org.json.JSONTokener;
