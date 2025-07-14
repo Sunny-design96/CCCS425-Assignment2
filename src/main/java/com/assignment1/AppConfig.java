@@ -11,6 +11,7 @@ public class AppConfig extends ResourceConfig {
         register(JsonBindingFeature.class);
         register(StudentService.class);
         register(CourseService.class);
+        register(EnrollmentService.class);
     }
     
 }
