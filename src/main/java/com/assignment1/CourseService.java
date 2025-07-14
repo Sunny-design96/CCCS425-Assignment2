@@ -18,14 +18,15 @@ import jakarta.ws.rs.core.Response;
 
 public class CourseService {
 
-	private static CourseList courseList = new CourseList();
+	private static CourseList courseList = CourseList.getInstance();
 	
 	// Get all courses.
 	@GET
 	public Response getAllCourses() {
-		List<Course> courses = courseList.getAllCourses();
+		List<Course> courses = courseList.getAllCourses().getCourses();
 		return Response.ok(courses).build();
 	}
+	
 	
 	// Get one course by ID.
 	@GET
@@ -42,44 +43,39 @@ public class CourseService {
 	// Post a new course.
 	@POST
 	public Response addCourse(Course course) {
-		if(course == null || course.getId() <= 0 || course.getName() == null || course.getInstructor() == null) {
+		if(course == null || course.getName() == null || course.getId() < 0 ) {
 			return Response.status(Response.Status.BAD_REQUEST)
-					.entity("Validation error.").build();
+					.entity("Invalid course data.").build();
 		}
-		
+		CourseList courseList = CourseList.getInstance();
 		courseList.addCourse(course);
 		return Response.status(Response.Status.CREATED)
-				.entity("Course created.").build();
+				.entity(course).build();
 	}
 	
 	// Update a course.
 	@PUT
 	@Path("/{id}")
 	public Response updateCourse(@PathParam("id") int id, Course course) {
-		if(course == null || course.getId() <= 0 || course.getName() == null || course.getInstructor() == null) {
-			return Response.status(Response.Status.BAD_REQUEST)
-					.entity("Validation error.").build();
-		}
-		
-		boolean updated = courseList.updateCourse(id, course);
-		if(!updated) {
+		if(courseList.getCourseByID(id) == null) {
 			return Response.status(Response.Status.NOT_FOUND)
-					.entity("Course not found").build();
+					.build();
 		}
-		return Response.ok("Course updated.").build();
+		courseList.updateCourse(id,  course);
+		return Response.ok(course)
+				.build();
 	}
+		
 	
 	// Delete a course.
 	@DELETE
 	@Path("/{id}")
 	public Response deleteCourse(@PathParam("id") int id) {
-		boolean deleted = courseList.deleteCourse(id);
 		
-		if(deleted) {
+		if(!courseList.deleteCourse(id)) {
 			return Response.noContent().build();
 		}
-		return Response.status(Response.Status.NOT_FOUND)
-				.entity("Course not found.").build();
+		return Response.noContent().build();
 	}
 	
 }

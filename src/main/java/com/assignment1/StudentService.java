@@ -22,10 +22,16 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("/students")
+@Path("students")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+
 public class StudentService {
-	StudentList studentList = new StudentList();
+	
+	private static StudentList studentList = StudentList.getInstance();
 	public static org.everit.json.schema.Schema schema = null;
+	
+	
 	public StudentService() {
 		 try (InputStream schemaStream = StudentService.class.getClassLoader().getResourceAsStream("student_schema.json")) {
 			 if (schemaStream == null) {
@@ -74,33 +80,37 @@ public class StudentService {
 	   }
 	   
    }
+   
+   @POST
+   @Produces(MediaType.APPLICATION_JSON)
+   @Consumes(MediaType.APPLICATION_JSON)
+	public Response createStudent(Student student) {
+		try {
+			if(student.getName() == null || student.getEmail() == null) {
+				return Response.status(Response.Status.BAD_REQUEST)
+						.entity("Invalid data.").build();
+			}
+			ObjectMapper mapper = new ObjectMapper();
+			String jsonStr = mapper.writeValueAsString(student);
+			JSONObject jsonObject = new JSONObject(jsonStr);
+			schema.validate(jsonObject);
+			
+			Students students = studentList.getStudents();
+			students.addStudent(student);
+			studentList.addStudent(student);
+			
+			Map<String, String> map = new HashMap<>();
+			map.put("status", "success");
+			map.put("message", "JSON data validated.");
+			map.put("student created", student.toString());
+			
+			return Response.ok(map, MediaType.APPLICATION_JSON).build();
+		} catch(Exception e) {
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Invalid data.").build();
+		}
+   }
 
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response createStudent(Student student) { 
-    	try {
-    		//deserialize the student object
-    		ObjectMapper mapper = new ObjectMapper();
-    		String jsonStr = mapper.writeValueAsString(student);
-    		JSONObject jsonObject = new JSONObject(jsonStr);
-    		
-    		//validate the student object
-            schema.validate(jsonObject);
-            Map<String, String> map = new HashMap<>();
-            map.put("status", "success");
-            map.put("message", "JSON data received and validated");
-            map.put("student created", student.toString());
-            
-            //write the student object to the list of students
-            Students students = studentList.getStudents();
-            students.addStudent(student);
-            return Response.ok(map, MediaType.APPLICATION_JSON).build();
-    	}catch(Exception e) {
-    		 return Response.status(Response.Status.BAD_REQUEST)
-    	                .entity("Missing required data, please try again.").build();
-    	}
-    }
     
     @PUT
 	@Path("/{id}")
@@ -108,6 +118,11 @@ public class StudentService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateStudent(@PathParam("id") int id, Student updatedStudent) {
     	try {
+    		if(updatedStudent.getName() == null || updatedStudent.getEmail() == null) {
+    			return Response.status(Response.Status.BAD_REQUEST)
+    					.entity("Missing required fields.").build();
+    		}
+    			
     		//deserialize the student object
     		ObjectMapper mapper = new ObjectMapper();
     		String jsonStr = mapper.writeValueAsString(updatedStudent);
