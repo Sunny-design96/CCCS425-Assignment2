@@ -1,3 +1,4 @@
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -104,20 +105,30 @@
 </dependency>
   </dependencies>
   <build>
-  	<plugins>
-  	<plugin>
-	   <groupId>com.github.victools</groupId>
-	   <artifactId>jsonschema-maven-plugin</artifactId>
-	   <version>4.31.1</version>
-		   <executions>
-		      <execution>
-		       <goals>
-		         <goal>generate</goal>
-		       </goals>
-		     </execution>
-		  </executions>
-		</plugin>
-  	</plugins>
-  	<finalName>jersey-assignment</finalName>
-  </build>
+  <finalName>jersey-assignment</finalName>
+  
+  <plugins>
+    <!-- Plugin to generate WAR file -->
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-war-plugin</artifactId>
+      <version>3.3.2</version>
+    </plugin>
+
+    <!-- Optional: keep your existing jsonschema plugin -->
+    <plugin>
+      <groupId>com.github.victools</groupId>
+      <artifactId>jsonschema-maven-plugin</artifactId>
+      <version>4.31.1</version>
+      <executions>
+        <execution>
+          <goals>
+            <goal>generate</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+  </plugins>
+</build>
+
 </project>
