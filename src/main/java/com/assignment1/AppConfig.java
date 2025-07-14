@@ -1,7 +1,6 @@
 package com.assignment1;
 
 import jakarta.ws.rs.ApplicationPath;
-
 import org.glassfish.jersey.jsonb.JsonBindingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -11,5 +10,7 @@ public class AppConfig extends ResourceConfig {
         packages("com.assignment1");
         register(JsonBindingFeature.class);
         register(StudentService.class);
+        register(CourseService.class);
     }
+    
 }
